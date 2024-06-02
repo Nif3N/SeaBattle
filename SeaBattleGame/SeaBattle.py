@@ -22,10 +22,10 @@ pygame.init()
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 pygame.display.set_caption("Sea Battle")
 game_over_font_size = 3 * block_size
-game_over_font = pygame.font.SysFont('notosans', game_over_font_size)
+game_over_font = pygame.font.Font("assets/Seagull_Wine.ttf", 50)
 
 font_size = int(block_size / 1.5)
-font = pygame.font.SysFont('notosans', font_size)
+font = pygame.font.Font("assets/Seagull_Wine.ttf",25)
 computer_available_to_fire_set = {(x, y) for x in range(16, 25) for y in range(1, 11)}
 around_last_computer_hit_set = set()
 hit_blocks = set()
@@ -446,7 +446,6 @@ def update_destroyed_ships(ind, computer_turn, opponents_ships_list_original_cop
     for i in range(-1, 1):
         update_dotted_and_hit_sets(ship[i], computer_turn, False)
 
-
 def update_around_last_computer_hit(fired_block, computer_hits):
     """
     Updates around_last_computer_hit_set (which is used to choose for computer to fire from) if it
@@ -668,18 +667,64 @@ BG = pygame.image.load("assets/Background.jpg")
 def get_font(size):  # Returns Press-Start-2P in the desired size
     return pygame.font.Font("assets/Seagull_Wine.ttf", size)
 
-def options():
+
+def about():
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
         SCREEN.fill("white")
 
-        OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
-        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+        RULES_HEAD_TEXT = get_font(50).render("Правила игры", True, "Red")
+        RULES_HEAD_RECT = RULES_HEAD_TEXT.get_rect(center=(200, 50))
 
-        OPTIONS_BACK = Button_MM(image=None, pos=(640, 460),
-                              text_input="Назад", font=get_font(75), base_color="Black", hovering_color="Green")
+        RULES1_TEXT = get_font(25).render("Играют два игрока, каждый из которых размещает корабли на своем поле размером 10х10 клеток.", True, "Black")
+        RULES1_RECT = RULES1_TEXT.get_rect(center=(700, 150))
+        RULES2_TEXT = get_font(25).render("Корабли могут быть различных размеров: однопалубные - 4 штуки, двухпалубные - 3 штуки,", True, "Black")
+        RULES2_RECT = RULES2_TEXT.get_rect(center=(660, 180))
+        RULES2dop_TEXT = get_font(25).render("трехпалубные - 2 штуки, четырехпалубные - 1 штука. Игроки поочередно делают ходы, указывая",True, "Black")
+        RULES2dop_RECT = RULES2dop_TEXT.get_rect(center=(695, 210))
+        RULES3_TEXT = get_font(25).render("координаты атаки на поле противника. Если в указанных координатах стоит корабль противника,", True, "Black")
+        RULES3_RECT = RULES3_TEXT.get_rect(center=(698, 240))
+        RULES4_TEXT = get_font(25).render("то он считается потопленным. В противном случае игрок промахивается. Побеждает игрок,", True, "Black")
+        RULES4_RECT = RULES4_TEXT.get_rect(center=(650, 270))
+        RULES5_TEXT = get_font(25).render("первым потопивший все корабли противника.", True, "Black")
+        RULES5_RECT = RULES5_TEXT.get_rect(center=(326, 300))
+
+        RULESpromah_TEXT = get_font(40).render(" - промах", True,"Black")
+        RULESpromah_RECT = RULESpromah_TEXT.get_rect(center=(230, 400))
+        RULESpopal_TEXT = get_font(40).render(" - попадание", True, "Black")
+        RULESpopal_RECT = RULESpopal_TEXT.get_rect(center=(265, 500))
+        RULESpotoplen_TEXT = get_font(40).render(" - потоплен", True, "Black")
+        RULESpotoplen_RECT = RULESpotoplen_TEXT.get_rect(center=(250, 600))
+
+        promah = pygame.image.load('assets/promah.png')
+        promah_rect = promah.get_rect(center=(100, 400))
+        SCREEN.blit(promah, promah_rect)
+
+        popal = pygame.image.load('assets/popal.png')
+        popal_rect = popal.get_rect(center=(100, 500))
+        SCREEN.blit(popal, popal_rect)
+
+        potoplen = pygame.image.load('assets/potoplen.png')
+        potoplen_rect = potoplen.get_rect(center=(100, 600))
+        SCREEN.blit(potoplen, potoplen_rect)
+
+        primer = pygame.image.load('assets/primer.png')
+        primer_rect = primer.get_rect(center=(950, 600))
+        SCREEN.blit(primer, primer_rect)
+
+        SCREEN.blit(RULESpotoplen_TEXT, RULESpotoplen_RECT)
+        SCREEN.blit(RULESpopal_TEXT, RULESpopal_RECT)
+        SCREEN.blit(RULESpromah_TEXT, RULESpromah_RECT)
+        SCREEN.blit(RULES_HEAD_TEXT, RULES_HEAD_RECT)
+        SCREEN.blit(RULES1_TEXT, RULES1_RECT)
+        SCREEN.blit(RULES2_TEXT, RULES2_RECT)
+        SCREEN.blit(RULES2dop_TEXT, RULES2dop_RECT)
+        SCREEN.blit(RULES3_TEXT, RULES3_RECT)
+        SCREEN.blit(RULES4_TEXT, RULES4_RECT)
+        SCREEN.blit(RULES5_TEXT, RULES5_RECT)
+        OPTIONS_BACK = Button_MM(image=None, pos=(100, 870),
+                              text_input="Назад", font=get_font(50), base_color="Black", hovering_color="Red")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
@@ -705,14 +750,14 @@ def main_menu():
 
         PLAY_BUTTON = Button_MM(image=pygame.image.load("assets/Play Rect.png"), pos=(820, 250),
                              text_input="Играть", font=get_font(75), base_color="Black", hovering_color="Red")
-        OPTIONS_BUTTON = Button_MM(image=pygame.image.load("assets/Options Rect.png"), pos=(820, 400),
-                                text_input="Настройки", font=get_font(75), base_color="Black", hovering_color="Red")
+        ABOUT_BUTTON = Button_MM(image=pygame.image.load("assets/Play Rect.png"), pos=(820, 400),
+                                   text_input="Об игре", font=get_font(75), base_color="Black", hovering_color="Red")
         QUIT_BUTTON = Button_MM(image=pygame.image.load("assets/Quit Rect.png"), pos=(820, 550),
                              text_input="Выход", font=get_font(75), base_color="Black", hovering_color="Red")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 
-        for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+        for button in [PLAY_BUTTON, ABOUT_BUTTON, QUIT_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -723,8 +768,8 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                     main()
-                if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    options()
+                if ABOUT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    about()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
@@ -769,8 +814,8 @@ def main():
     SCREEN.blit(USER_TEXT, USER_RECT)
     #draw_ships(computer.ships)
 
-    PLAY_BACK = Button_MM(image=None, pos=(800, 640),
-                       text_input="Назад", font=get_font(75), base_color="Black", hovering_color="Red")
+    PLAY_QUIT = Button_MM(image=None, pos=(100, 870),
+                       text_input="Выход", font=get_font(50), base_color="Black", hovering_color="Red")
 
     while ships_creation_not_decided:
         auto_button.draw_button()
@@ -802,8 +847,8 @@ def main():
 
     while ships_not_created:
         screen.fill(WHITE, rect_for_grids)
-        computer_grid = Grid("КОМПЬЮТЕР", 0)
-        human_grid = Grid("ЧЕЛОВЕК", 15)
+        computer_grid = Grid(" ", 0)
+        human_grid = Grid(" ", 15)
         undo_button.draw_button()
         undo_button.print_message_for_button()
         undo_button.change_color_on_hover()
@@ -881,8 +926,8 @@ def main():
 
     while not game_over:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
-        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-        PLAY_BACK.update(screen)
+        PLAY_QUIT.changeColor(PLAY_MOUSE_POS)
+        PLAY_QUIT.update(screen)
         draw_ships(destroyed_computer_ships)
         draw_ships(human_ships_to_draw)
         pygame.display.update()
@@ -911,8 +956,9 @@ def main():
                         "ВЫСТРЕЛ ЗА ПРЕДЕЛЫ СЕТКИ!", message_rect_computer)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    main_menu()
+                if PLAY_QUIT.checkForInput(PLAY_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
 
         if computer_turn:
             set_to_shoot_from = computer_available_to_fire_set
